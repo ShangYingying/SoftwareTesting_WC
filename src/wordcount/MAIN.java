@@ -1,13 +1,11 @@
 package wordcount;
 
-import java.awt.List;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class MAIN 
 {
@@ -162,7 +160,70 @@ public class MAIN
         }
         WRITE=new StringBuilder().append("\r\n").append(file).append(",").append(" 代码行").append("/").append(" 空行").append("/").append(" 注释行：").append(codeNum).append("/").append(nullNum).append("/").append(explainNum).toString();       
     }
+    
+    //有停用词表时的数单词
+    public static void stop_word(String file1,String file2) 
+    {
+        try
+        {
+        	int stopNum=0;
+            FileReader fr = new FileReader(file1);
+            BufferedReader br = new BufferedReader(fr);
+            FileReader fr_s = new FileReader(file2);
+            @SuppressWarnings("resource")
+			BufferedReader br_s = new BufferedReader(fr_s);
+            String BR=br.readLine();
+            String BR_s=br_s.readLine();
+            String b=BR_s;
+            while(BR!=null)
+            {
+            	int j=0;
+            	String[] array=BR.split("\\s+|,");
+            	stopNum+=array.length;
+            	while(j<array.length)
+            	{    
+            		int k=0;
+            		b=BR_s;
+                    while (b != null)
+                    {       
+                    	String[] array_s=BR_s.split("\\s+|,");
+                    	while(k<array_s.length)
+                    	{
+                    		if(array[j].equals(array_s[k]))
+                    			stopNum--;
+                    		System.out.print(array_s[k]);
+                    		k++;         		
+                    	}   
+                    	b=br_s.readLine(); 
+                    }
+                    System.out.print(array[j]);
+                    j++;          
+            	}
+            	BR=br.readLine();
+            }
+            System.out.print(stopNum);
+             br.close();
+             WRITE=new StringBuilder().append("\r\n").append(file1).append("，单词数：").append(stopNum).toString();       
+             
+        } 
 
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
+    //处理文件内部文件
+	public static void readfiles(String fileDir)
+	{
+		File file=new File(fileDir);
+		test=file.list();
+		for(int i=0;i<test.length;i++)
+		{
+			test[i]=new StringBuilder().append(fileDir).append("\\").append(test[i]).toString();
+            
+		} 
+	}
     
     //主函数
     public static void main(String[] args) 
@@ -181,26 +242,108 @@ public class MAIN
             	 //输入要数字符的文件名
             	 if(args[args.length-2].equals("-o"))
             	 {
+            		 if(args[args.length-4].equals("-e"))
+            		 {
+            			 if(args[0].equals("-s"))
+            			 {
+            				 readfiles(args[args.length-5]);
+            					for(int m=0;m<test.length;m++)
+            					{
+            						readfile_char(test[m]);
+                   				 	writefile(args[args.length-1],WRITE);
+            					} 
+            			 }
+            			 else
+            			 {
+            				 readfile_char(args[args.length-5]);
+            				 writefile(args[args.length-1],WRITE);
+            			 }
+            		 }
+            		 else
+            		 {
+            			 if(args[0].equals("-s"))
+            			 {
+            				 readfiles(args[args.length-3]);
+            					for(int m=0;m<test.length;m++)
+            					{
+            						readfile_char(test[m]);
+                   				 	writefile(args[args.length-1],WRITE);
+            					} 
+            			 }
+            			 else	 
+            			 {
             				 readfile_char(args[args.length-3]);
             				 writefile(args[args.length-1],WRITE);
-            			
+            			 }
             		 }
-            	}
-            	 else	 
+            	 }
+            	 else
+            	 {
+            		 if(args[0].equals("-s"))
+        			 {
+        				 readfiles(args[args.length-1]);
+        					for(int m=0;m<test.length;m++)
+        					{
+        						readfile_char(test[m]);
+        					} 
+        			 }
+            		 else
             			 readfile_char(args[args.length-1]);
-             
+            	 }
+             }
              //数单词
              if(args[i].equals("-w"))
              {
             	 //输入要数单词的文件名
             	 if(args[args.length-2].equals("-o"))
             	 {
-            		 readfile_word(args[args.length-3]);
-            		 writefile(args[args.length-1],WRITE);
+            		 if(args[args.length-4].equals("-e"))    //有停用
+            		 {
+            			 if(args[0].equals("-s"))
+            			 {
+            				 readfiles(args[args.length-5]);
+            					for(int m=0;m<test.length;m++)
+            					{
+            						stop_word(test[m],args[args.length-3]);
+                   				 	writefile(args[args.length-1],WRITE);
+            					} 
+            			 }
+            			 else
+            			 {
+            				 stop_word(args[args.length-5],args[args.length-3]);
+            				 writefile(args[args.length-1],WRITE);
+            			 }
+            		 }
+            		 else
+            		 {
+            			 if(args[0].equals("-s"))
+            			 {
+            				 readfiles(args[args.length-3]);
+            					for(int m=0;m<test.length;m++)
+            					{
+            						readfile_word(test[m]);
+                   				 	writefile(args[args.length-1],WRITE);
+            					} 
+            			 }
+            			 else
+            			 {
+            				 readfile_word(args[args.length-3]);
+            				 writefile(args[args.length-1],WRITE);
+            			 }
+            		 }
             	 }
-            			 
+            	 else
+            	 {
+            		 if(args[0].equals("-s"))
+        			 {
+        				 readfiles(args[args.length-1]);
+        					for(int m=0;m<test.length;m++)
+        					{
+        						readfile_word(test[m]);
+          					} 
+        			 }
             		 readfile_word(args[args.length-1]);
-            	 
+            	 }
     	     }
              	//数行数
              if(args[i].equals("-l"))
@@ -208,28 +351,114 @@ public class MAIN
             	 //输入要数字符的文件名
             	 if(args[args.length-2].equals("-o"))
             	 {
-            		 readfile_line(args[args.length-3]);
-            		 writefile(args[args.length-1],WRITE);
-            	}
-            		
+            		 if(args[args.length-4].equals("-e"))
+            		 {
+            			 if(args[0].equals("-s"))
+            			 {
+            				 readfiles(args[args.length-5]);
+            					for(int m=0;m<test.length;m++)
+            					{
+            						readfile_line(test[m]);
+                   				 	writefile(args[args.length-1],WRITE);
+            					} 
+            			 }
+            			 else
+            			 {
+            				 readfile_line(args[args.length-5]);
+            				 writefile(args[args.length-1],WRITE);
+            			 }
+            		 }
+            		 else
+            		 {
+            			 if(args[0].equals("-s"))
+            			 {
+            				 readfiles(args[args.length-3]);
+            					for(int m=0;m<test.length;m++)
+            					{
+            						readfile_line(test[m]);
+                   				 	writefile(args[args.length-1],WRITE);
+            					} 
+            			 }
+            			 else	 
+            			 {
+            				 readfile_line(args[args.length-3]);
+            				 writefile(args[args.length-1],WRITE);
+            			 }
+            		 }
+            	 }
+            	 else
+            	 {
+            		 if(args[0].equals("-s"))
+        			 {
+        				 readfiles(args[args.length-1]);
+        					for(int m=0;m<test.length;m++)
+        					{
+        						readfile_line(test[m]);
+        					} 
+        			 }
             		 else
             			 readfile_line(args[args.length-1]);
-            }
+            	 }
+             }
+           //代码行、空行、注释行
              if(args[i].equals("-a"))
              {
             	 //输入要数字符的文件名
             	 if(args[args.length-2].equals("-o"))
             	 {
-            		 wc2(args[args.length-3]);
-            		 writefile(args[args.length-1],WRITE);
-            	}
-            		
+            		 if(args[args.length-4].equals("-e"))
+            		 {
+            			 if(args[0].equals("-s"))
+            			 {
+            				 readfiles
+            				 (args[args.length-5]);
+            					for(int m=0;m<test.length;m++)
+            					{
+            						wc2(test[m]);
+                   				 	writefile(args[args.length-1],WRITE);
+            					} 
+            			 }
+            			 else
+            			 {
+            				 wc2(args[args.length-5]);
+            				 writefile(args[args.length-1],WRITE);
+            			 }
+            		 }
+            		 else
+            		 {
+            			 if(args[0].equals("-s"))
+            			 {
+            				 readfiles(args[args.length-3]);
+            					for(int m=0;m<test.length;m++)
+            					{
+            						wc2(test[m]);
+                   				 	writefile(args[args.length-1],WRITE);
+            					} 
+            			 }
+            			 else	 
+            			 {
+            				 wc2(args[args.length-3]);
+            				 writefile(args[args.length-1],WRITE);
+            			 }
+            		 }
+            	 }
+            	 else
+            	 {
+            		 if(args[0].equals("-s"))
+        			 {
+        				 readfiles(args[args.length-1]);
+        					for(int m=0;m<test.length;m++)
+        					{
+        						wc2(test[m]);
+        					} 
+        			 }
             		 else
             			 wc2(args[args.length-1]);
-            }
+            	 }
              }
-           
+             
                        
          }
-
+    }
 }
+
