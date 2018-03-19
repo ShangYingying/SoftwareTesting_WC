@@ -119,6 +119,51 @@ public class MAIN
         }
     }
     
+    ///////////////////扩展功能//////////////////////
+    //数代码行、注释行和空行
+    public static void wc2(String file) 
+    {
+		int codeNum = 0,nullNum=0,explainNum=0,line=0;
+    	String content;
+        try
+        {
+            FileReader fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+            content=br.readLine();
+            while (content!= null)
+            {       
+            	line++;
+                /////////////////空行////////////////////
+            	String null_type1="\\s*";
+            	String null_type2=".\\s*";
+				if(content.matches(null_type1)||content.matches(null_type2))
+            	{
+            		nullNum++;
+            	}
+            	/////////////////注释行//////////////////
+            	String explain_type1="//.*";            //两个斜杠加任意字符
+            	String explain_type2="//\\s*";          //两个斜杠加上任意数量的空格
+            	String explain_type3=".//";             //一个任意字符加上两个斜杠
+            	String explain_type4=".//.*";           //一个任意字符加上两个斜杠和任意字符
+            	String explain_type5="/*";              //用/*表示注释
+            	if(content.matches(explain_type1)||content.matches(explain_type2)||content.matches(explain_type3)||content.matches(explain_type4)||content.matches(explain_type5))
+            	{
+            		explainNum++;
+            	}
+				content=br.readLine();
+            }
+            ///////////////代码行////////////////////
+            codeNum=line-nullNum-explainNum;      
+             br.close();
+        } 
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        WRITE=new StringBuilder().append("\r\n").append(file).append(",").append(" 代码行").append("/").append(" 空行").append("/").append(" 注释行：").append(codeNum).append("/").append(nullNum).append("/").append(explainNum).toString();       
+    }
+
+    
     //主函数
     public static void main(String[] args) 
     {
@@ -169,7 +214,19 @@ public class MAIN
             		
             		 else
             			 readfile_line(args[args.length-1]);
-            	 }
+            }
+             if(args[i].equals("-a"))
+             {
+            	 //输入要数字符的文件名
+            	 if(args[args.length-2].equals("-o"))
+            	 {
+            		 wc2(args[args.length-3]);
+            		 writefile(args[args.length-1],WRITE);
+            	}
+            		
+            		 else
+            			 wc2(args[args.length-1]);
+            }
              }
            
                        
