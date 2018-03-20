@@ -312,13 +312,13 @@ public class MAIN
             			 }
             	 }
              }
-             //数单词
+             //数单词           
              if(args[i].equals("-w"))
              {
-            	 //输入要数单词的文件名
+            	 //输入要数字符的文件名
             	 if(args[args.length-2].equals("-o"))
             	 {
-            		 if(args[args.length-4].equals("-e"))    //有停用
+            		 if(args[args.length-4].equals("-e"))
             		 {
             			 if(args[0].equals("-s"))
             			 {
@@ -339,34 +339,52 @@ public class MAIN
             		 {
             			 if(args[0].equals("-s"))
             			 {
-                			 if(args[args.length-2].equals("-e"))
-                			 {
-                				 readfiles(args[args.length-3]);
-             					for(int m=0;m<test.length;m++)
-             					{
-             						readfile_word(test[m]);
-             					} 
-                			 }
-                			 else
-                			 {
-                				readfiles(args[args.length-3]);
+            				 readfiles(args[args.length-3]);
             					for(int m=0;m<test.length;m++)
             					{
             						readfile_word(test[m]);
+                   				 	writefile(args[args.length-1],WRITE);
             					} 
-            				 }
             			 }
-                		 else{
-                			 if(args[args.length-2].equals("-e"))
-                			 {
-                				 readfile_word(args[args.length-3]); 
-                			 } 
-                			 else
-                				 readfile_word(args[args.length-1]);
-                			 }
+            			 else	 
+            			 {
+            				 readfile_word(args[args.length-3]);
+            				 writefile(args[args.length-1],WRITE);
+            			 }
+            		 }
             	 }
-    	     }
-          }
+            	 else
+            	 {
+            		 if(args[0].equals("-s"))
+        			 {
+            			 if(args[args.length-2].equals("-e"))
+            			 {
+            				 readfiles(args[args.length-3]);
+         					for(int m=0;m<test.length;m++)
+         					{
+         						stop_word(test[m],args[args.length-1]);
+         					} 
+            			 }
+            			 else
+            			 {
+            				readfiles(args[args.length-1]);
+        					for(int m=0;m<test.length;m++)
+        					{
+        						readfile_word(test[m]);
+        					} 
+        				 }
+        			 }
+            		 else{
+            			 if(args[args.length-2].equals("-e"))
+            			 {
+            				 stop_word(args[args.length-3],args[args.length-1]);
+            			 } 
+            			 else
+            				 readfile_word(args[args.length-1]);
+            			 }
+            	 }
+             }
+             
              	//数行数
              if(args[i].equals("-l"))
              {
@@ -394,33 +412,50 @@ public class MAIN
             		 {
             			 if(args[0].equals("-s"))
             			 {
-                			 if(args[args.length-2].equals("-e"))
-                			 {
-                				 readfiles(args[args.length-3]);
-             					for(int m=0;m<test.length;m++)
-             					{
-             						readfile_line(test[m]);
-             					} 
-                			 }
-                			 else
-                			 {
-                				readfiles(args[args.length-3]);
+            				 readfiles(args[args.length-3]);
             					for(int m=0;m<test.length;m++)
             					{
             						readfile_line(test[m]);
+                   				 	writefile(args[args.length-1],WRITE);
             					} 
-            				 }
             			 }
-                		 else{
-                			 if(args[args.length-2].equals("-e"))
-                			 {
-                				 readfile_line(args[args.length-3]); 
-                			 } 
-                			 else
-                				 readfile_line(args[args.length-1]);
-                			 }
+            			 else	 
+            			 {
+            				 readfile_line(args[args.length-3]);
+            				 writefile(args[args.length-1],WRITE);
+            			 }
+            		 }
             	 }
-             }
+            	 else
+            	 {
+            		 if(args[0].equals("-s"))
+        			 {
+            			 if(args[args.length-2].equals("-e"))
+            			 {
+            				 readfiles(args[args.length-3]);
+         					for(int m=0;m<test.length;m++)
+         					{
+         						readfile_line(test[m]);
+         					} 
+            			 }
+            			 else
+            			 {
+            				readfiles(args[args.length-1]);
+        					for(int m=0;m<test.length;m++)
+        					{
+        						readfile_line(test[m]);
+        					} 
+        				 }
+        			 }
+            		 else{
+            			 if(args[args.length-2].equals("-e"))
+            			 {
+            				 readfile_line(args[args.length-3]); 
+            			 } 
+            			 else
+            				 readfile_line(args[args.length-1]);
+            			 }
+            	 }
              }
            //代码行、空行、注释行
              if(args[i].equals("-a"))
@@ -432,8 +467,7 @@ public class MAIN
             		 {
             			 if(args[0].equals("-s"))
             			 {
-            				 readfiles
-            				 (args[args.length-5]);
+            				 readfiles(args[args.length-5]);
             					for(int m=0;m<test.length;m++)
             					{
             						wc2(test[m]);
@@ -446,41 +480,57 @@ public class MAIN
             				 writefile(args[args.length-1],WRITE);
             			 }
             		 }
-              }
             		 else
             		 {
             			 if(args[0].equals("-s"))
             			 {
-                			 if(args[args.length-2].equals("-e"))
-                			 {
-                				 readfiles(args[args.length-3]);
-             					for(int m=0;m<test.length;m++)
-             					{
-             						wc2(test[m]);
-             					} 
-                			 }
-                			 else
-                			 {
-                				readfiles(args[args.length-1]);
+            				 readfiles(args[args.length-3]);
             					for(int m=0;m<test.length;m++)
             					{
             						wc2(test[m]);
+                   				 	writefile(args[args.length-1],WRITE);
             					} 
-            				 }
             			 }
-                		 else{
-                			 if(args[args.length-2].equals("-e"))
-                			 {
-                				 wc2(args[args.length-3]); 
-                			 } 
-                			 else
-                				 wc2(args[args.length-1]);
-                			 }
+            			 else	 
+            			 {
+            				 wc2(args[args.length-3]);
+            				 writefile(args[args.length-1],WRITE);
+            			 }
+            		 }
             	 }
-            	 
-             
-             }           
+            	 else
+            	 {
+            		 if(args[0].equals("-s"))
+        			 {
+            			 if(args[args.length-2].equals("-e"))
+            			 {
+            				 readfiles(args[args.length-3]);
+         					for(int m=0;m<test.length;m++)
+         					{
+         						wc2(test[m]);
+         					} 
+            			 }
+            			 else
+            			 {
+            				readfiles(args[args.length-1]);
+        					for(int m=0;m<test.length;m++)
+        					{
+        						wc2(test[m]);
+        					} 
+        				 }
+        			 }
+            		 else{
+            			 if(args[args.length-2].equals("-e"))
+            			 {
+            				 wc2(args[args.length-3]); 
+            			 } 
+            			 else
+            				 wc2(args[args.length-1]);
+            			 }
+            	 }
+             }
+    }
          
     }
-    }}
+}
     
