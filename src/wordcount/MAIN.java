@@ -19,7 +19,7 @@ public class MAIN
     	int i_char=0;
         try
          {
-            FileReader fr = new FileReader(file);
+            FileReader fr = new FileReader(file);    //fr指向文件
             @SuppressWarnings("resource")
 			BufferedReader br = new BufferedReader(fr);
             String line=br.readLine();
@@ -31,7 +31,7 @@ public class MAIN
             System.out.print(file);
             System.out.print(",");
             System.out.print(" 字符数：");
-            System.out.print(i_char);
+            System.out.println(i_char);
             read_char[0]=file;
             read_char[1]=",";
             read_char[2]=" 字符数 ";
@@ -42,7 +42,6 @@ public class MAIN
             e.printStackTrace();
         }
     }
-
     //数单词
     public static void readfile_word(String file)
     {
@@ -66,7 +65,7 @@ public class MAIN
             System.out.print(file);
             System.out.print(",");
             System.out.print(" 单词数：");
-            System.out.print(wordNum);
+            System.out.println(wordNum);
             WRITE=new StringBuilder().append("\r\n").append(file).append(",").append(" 单词数：").append(wordNum).toString();
             
         }
@@ -91,7 +90,7 @@ public class MAIN
             System.out.print(file);
             System.out.print(",");
             System.out.print(" 行数：");
-            System.out.print(lineNum);
+            System.out.println(lineNum);
             WRITE=new StringBuilder().append("\r\n").append(file).append(",").append(" 行数：").append(lineNum).toString();
             
              br.close();
@@ -158,7 +157,10 @@ public class MAIN
         {
             e.printStackTrace();
         }
+       
         WRITE=new StringBuilder().append("\r\n").append(file).append(",").append(" 代码行").append("/").append(" 空行").append("/").append(" 注释行：").append(codeNum).append("/").append(nullNum).append("/").append(explainNum).toString();       
+        String WRITE1=new StringBuilder().append(file).append(",").append(" 代码行").append("/").append(" 空行").append("/").append(" 注释行：").append(codeNum).append("/").append(nullNum).append("/").append(explainNum).toString();       
+        System.out.println(WRITE1);
     }
     
     //有停用词表时的数单词
@@ -167,20 +169,20 @@ public class MAIN
         try
         {
         	int stopNum=0;
-            FileReader fr = new FileReader(file1);
+            FileReader fr = new FileReader(file1);       //待处理文件
             BufferedReader br = new BufferedReader(fr);
-            FileReader fr_s = new FileReader(file2);
+            FileReader fr_s = new FileReader(file2);     //停用表
             @SuppressWarnings("resource")
 			BufferedReader br_s = new BufferedReader(fr_s);
             String BR=br.readLine();
             String BR_s=br_s.readLine();
             String b=BR_s;
             while(BR!=null)
-            {
+            { 
             	int j=0;
-            	String[] array=BR.split("\\s+|,");
+            	String[] array=BR.split("\\s+|,");      //split分离每个单词
             	stopNum+=array.length;
-            	while(j<array.length)
+            	while(j<array.length)                       //对于待处理文件每一行的每个单词
             	{    
             		int k=0;
             		b=BR_s;
@@ -189,22 +191,24 @@ public class MAIN
                     	String[] array_s=BR_s.split("\\s+|,");
                     	while(k<array_s.length)
                     	{
-                    		if(array[j].equals(array_s[k]))
+                    		if(array[j].equals(array_s[k]))         //都与停用表每一行的每一个单词比较，相同就减一
                     			stopNum--;
-                    		System.out.print(array_s[k]);
+                    		//System.out.print(array_s[k]);
                     		k++;         		
                     	}   
                     	b=br_s.readLine(); 
                     }
-                    System.out.print(array[j]);
+                   // System.out.print(array[j]);
                     j++;          
             	}
             	BR=br.readLine();
             }
-            System.out.print(stopNum);
+           // System.out.print(stopNum);
              br.close();
-             WRITE=new StringBuilder().append("\r\n").append(file1).append("，单词数：").append(stopNum).toString();       
-             
+             WRITE=new StringBuilder().append("\r\n").append(file1).append("，单词数(有停用)：").append(stopNum).toString();       
+             System.out.print(file1);
+             System.out.print("，单词数(有停用)：");
+             System.out.println(stopNum);
         } 
 
         catch (IOException e)
@@ -218,9 +222,9 @@ public class MAIN
 	{
 		File file=new File(fileDir);
 		test=file.list();
-		for(int i=0;i<test.length;i++)
+		for(int h=0;h<test.length;h++)
 		{
-			test[i]=new StringBuilder().append(fileDir).append("\\").append(test[i]).toString();
+			test[h]=new StringBuilder().append(fileDir).append("\\").append(test[h]).toString();
             
 		} 
 	}
@@ -281,14 +285,31 @@ public class MAIN
             	 {
             		 if(args[0].equals("-s"))
         			 {
-        				 readfiles(args[args.length-1]);
+            			 if(args[args.length-2].equals("-e"))
+            			 {
+            				 readfiles(args[args.length-3]);
+         					for(int m=0;m<test.length;m++)
+         					{
+         						readfile_char(test[m]);
+         					} 
+            			 }
+            			 else
+            			 {
+            				readfiles(args[args.length-1]);
         					for(int m=0;m<test.length;m++)
         					{
         						readfile_char(test[m]);
         					} 
+        				 }
         			 }
-            		 else
-            			 readfile_char(args[args.length-1]);
+            		 else{
+            			 if(args[args.length-2].equals("-e"))
+            			 {
+            				 readfile_char(args[args.length-3]); 
+            			 } 
+            			 else
+            				 readfile_char(args[args.length-1]);
+            			 }
             	 }
              }
              //数单词
@@ -318,33 +339,34 @@ public class MAIN
             		 {
             			 if(args[0].equals("-s"))
             			 {
-            				 readfiles(args[args.length-3]);
+                			 if(args[args.length-2].equals("-e"))
+                			 {
+                				 readfiles(args[args.length-3]);
+             					for(int m=0;m<test.length;m++)
+             					{
+             						readfile_word(test[m]);
+             					} 
+                			 }
+                			 else
+                			 {
+                				readfiles(args[args.length-3]);
             					for(int m=0;m<test.length;m++)
             					{
             						readfile_word(test[m]);
-                   				 	writefile(args[args.length-1],WRITE);
             					} 
+            				 }
             			 }
-            			 else
-            			 {
-            				 readfile_word(args[args.length-3]);
-            				 writefile(args[args.length-1],WRITE);
-            			 }
-            		 }
-            	 }
-            	 else
-            	 {
-            		 if(args[0].equals("-s"))
-        			 {
-        				 readfiles(args[args.length-1]);
-        					for(int m=0;m<test.length;m++)
-        					{
-        						readfile_word(test[m]);
-          					} 
-        			 }
-            		 readfile_word(args[args.length-1]);
+                		 else{
+                			 if(args[args.length-2].equals("-e"))
+                			 {
+                				 readfile_word(args[args.length-3]); 
+                			 } 
+                			 else
+                				 readfile_word(args[args.length-1]);
+                			 }
             	 }
     	     }
+          }
              	//数行数
              if(args[i].equals("-l"))
              {
@@ -372,33 +394,33 @@ public class MAIN
             		 {
             			 if(args[0].equals("-s"))
             			 {
-            				 readfiles(args[args.length-3]);
+                			 if(args[args.length-2].equals("-e"))
+                			 {
+                				 readfiles(args[args.length-3]);
+             					for(int m=0;m<test.length;m++)
+             					{
+             						readfile_line(test[m]);
+             					} 
+                			 }
+                			 else
+                			 {
+                				readfiles(args[args.length-3]);
             					for(int m=0;m<test.length;m++)
             					{
             						readfile_line(test[m]);
-                   				 	writefile(args[args.length-1],WRITE);
             					} 
+            				 }
             			 }
-            			 else	 
-            			 {
-            				 readfile_line(args[args.length-3]);
-            				 writefile(args[args.length-1],WRITE);
-            			 }
-            		 }
+                		 else{
+                			 if(args[args.length-2].equals("-e"))
+                			 {
+                				 readfile_line(args[args.length-3]); 
+                			 } 
+                			 else
+                				 readfile_line(args[args.length-1]);
+                			 }
             	 }
-            	 else
-            	 {
-            		 if(args[0].equals("-s"))
-        			 {
-        				 readfiles(args[args.length-1]);
-        					for(int m=0;m<test.length;m++)
-        					{
-        						readfile_line(test[m]);
-        					} 
-        			 }
-            		 else
-            			 readfile_line(args[args.length-1]);
-            	 }
+             }
              }
            //代码行、空行、注释行
              if(args[i].equals("-a"))
@@ -424,41 +446,41 @@ public class MAIN
             				 writefile(args[args.length-1],WRITE);
             			 }
             		 }
+              }
             		 else
             		 {
             			 if(args[0].equals("-s"))
             			 {
-            				 readfiles(args[args.length-3]);
+                			 if(args[args.length-2].equals("-e"))
+                			 {
+                				 readfiles(args[args.length-3]);
+             					for(int m=0;m<test.length;m++)
+             					{
+             						wc2(test[m]);
+             					} 
+                			 }
+                			 else
+                			 {
+                				readfiles(args[args.length-1]);
             					for(int m=0;m<test.length;m++)
             					{
             						wc2(test[m]);
-                   				 	writefile(args[args.length-1],WRITE);
             					} 
+            				 }
             			 }
-            			 else	 
-            			 {
-            				 wc2(args[args.length-3]);
-            				 writefile(args[args.length-1],WRITE);
-            			 }
-            		 }
+                		 else{
+                			 if(args[args.length-2].equals("-e"))
+                			 {
+                				 wc2(args[args.length-3]); 
+                			 } 
+                			 else
+                				 wc2(args[args.length-1]);
+                			 }
             	 }
-            	 else
-            	 {
-            		 if(args[0].equals("-s"))
-        			 {
-        				 readfiles(args[args.length-1]);
-        					for(int m=0;m<test.length;m++)
-        					{
-        						wc2(test[m]);
-        					} 
-        			 }
-            		 else
-            			 wc2(args[args.length-1]);
-            	 }
-             }
+            	 
              
-                       
-         }
+             }           
+         
     }
-}
-
+    }}
+    
